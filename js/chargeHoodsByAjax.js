@@ -16,7 +16,7 @@ $(document).ready(function(){
 	/		15		//	"probando"		   /					
 	////////////////////////////////////////
 	////////////////////////////////////////
-	/		16		//	"ultimo ingresado" /    <---- iEndHoods					
+	/		16		//	"ultimo ingresado" /    <---- iEndHoods				
 	////////////////////////////////////////			
 	/
 	/
@@ -58,6 +58,7 @@ $(document).ready(function(){
 					$(".btnVerMas").show();
 				}
 				updateCountHoodsByUSer();
+				updateCountAttachmentsByUser();
 			});
 		}
 		function getMoreHoods(){
@@ -82,10 +83,25 @@ $(document).ready(function(){
 				}
 			});
 		}
+		function updateCountAttachmentsByUser(){
+			var url_encoded = window.location.protocol +"//"+ window.location.host +"/"+ (window.location.pathname).split("/")[1] +"/hood/getCountAttachmentsByUser";
+
+			$.ajax({
+				type: 'POST',
+				url : url_encoded,
+				success : function(response){
+					var result = jQuery.parseJSON(response);
+					$(".attachmentsAmount").html(result["COUNT(*)"]);
+						
+				}
+			});
+		}
 		function infiteScroll(){
 			$(window).scroll(function () { 
-				console.log($(window).scrollTop() + " --- " + ($(document).height() - $(window).height()));
-				if(($(window).scrollTop() + 1) == ($(document).height() - $(window).height())){
+				var scrollHeight = $(window).scrollTop() + 1;
+				var windowHeight = ($(document).height() - $(window).height());
+				//console.log(scrollHeight + " --- " + windowHeight);
+				if((scrollHeight >= windowHeight-10) && (scrollHeight <= windowHeight+10)){
 					getMoreHoods();
 				}
 			});
@@ -93,11 +109,16 @@ $(document).ready(function(){
 	// ------------------------------ Print Function ------------------------------------------
 
 		function printHoodsInPoste(response,option){
-			var result = jQuery.parseJSON(response);
+			var result = JSON.parse(response);
+			currentUser = result.currentUsername;
+			result = result.records;
 			var html = "";
 			$.each(result,function(index,value){
 				html += "<div>";
-	            html += "<a href='../perfil'>";
+				if(value.username == currentUser)
+	            	html += "<a href='"+ window.location.protocol +"//"+ window.location.host +"/index.php/perfil/'>";
+	            else
+	            	html += "<a href='"+ window.location.protocol +"//"+ window.location.host +"/index.php/perfil/user/"+value.username+"'>";
 	            html += "<img src='"+ window.location.protocol +"//"+ window.location.host +"/img/userImages/"+value.url_img+"'/>";
 	            html += "<h1>"+value.user+ ' ' +value.last_name+"</h1>";
 	            html += "<span>@"+ value.username +"</span>";
@@ -106,7 +127,9 @@ $(document).ready(function(){
 	            html += "<div>";
 	            html += "<span>"+value.time+"</span>";
 	            html += "<span>"+ value.date + "</span>";
-	            html += "<a href='#'>Archivo adjunto.pdf</a>";
+	            if(value.filename != null){
+	            	html += "<a href='"+ window.location.protocol +"//"+ window.location.host +"/files/"+value.filename+"'>"+value.filename+"</a>";
+	            }
 	            html += "</div>";
 	          	html += "</div>";
 			});
@@ -152,18 +175,23 @@ $(document).ready(function(){
 
 		function getHoods(option){
 			var url_encoded = window.location.protocol +"//"+ window.location.host +"/"+ (window.location.pathname).split("/")[1] + "/hood/getAllHoods";
-
+			var parametros = {};
 			if(page.indexOf('perfil') != -1){
-				var url_encoded = window.location.protocol +"//"+ window.location.host +"/"+ (window.location.pathname).split("/")[1] + "/hood/getHoodsByUser";
+				
+				if((window.location.pathname).split("/")[(window.location.pathname).split("/").length - 2] == "user"){
+					parametros.username = (window.location.pathname).split("/")[(window.location.pathname).split("/").length - 1];
+					var url_encoded = window.location.protocol +"//"+ window.location.host +"/"+ (window.location.pathname).split("/")[1] + "/hood/getHoodsByUsername";
+				}
+				else{
+					var url_encoded = window.location.protocol +"//"+ window.location.host +"/"+ (window.location.pathname).split("/")[1] + "/hood/getHoodsByUser";
+				}
 			}
 			else if(page.indexOf('poste') != -1){
 				var url_encoded = window.location.protocol +"//"+ window.location.host +"/"+ (window.location.pathname).split("/")[1] + "/hood/getAllHoods";
 			}
 		
-			var parametros = {
-				"iStart" : iStartHoods,
-				"iEnd" : iEndHoods
-			};
+			parametros.iStart = iStartHoods;
+			parametros.iEnd = iEndHoods;
 			
 			$.ajax({
 				type: 'POST',

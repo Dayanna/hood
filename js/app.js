@@ -22,7 +22,11 @@ $(document).ready(function() {
                 success: function(data) {
                     var data = JSON.parse(data);
                     if (data.accountCreated) {
+<<<<<<< HEAD
                         $('#signup-error').html('Se ha creado su cuenta, por favor revise su correo para activarla');
+=======
+                        $('#errorRegistro').html('Se ha creado su cuenta, por favor revise su correo para activarla');
+>>>>>>> 2fa8676faeb6f7bea03f22bb8f5a9ab3815e20ae
                         $('#signup-error').modal();
                         setTimeout(function() {
                             var prot = window.location.protocol;
@@ -31,11 +35,16 @@ $(document).ready(function() {
                         }, 4000);
                     }
                     else if (data.errorMail && data.errorUsername) {
+<<<<<<< HEAD
                         $('#signup-error').html(data.errorMail + '<br>' + data.errorUsername);
+=======
+                        $('#errorRegistro').html(data.errorMail + '<br>' + data.errorUsername);
+>>>>>>> 2fa8676faeb6f7bea03f22bb8f5a9ab3815e20ae
                         $('#signup-error').modal();
                     }
                     else {
                         if (data.errorMail) {
+<<<<<<< HEAD
                             $('#signup-error').html(data.errorMail);
                             $('#signup-error').modal();
                         }
@@ -43,6 +52,16 @@ $(document).ready(function() {
                             $('#signup-error').html(data.errorMail);
                             $('#signup-error').modal();
                         }
+=======
+                            $('#errorRegistro').html(data.errorMail);
+                            $('#signup-error').modal();
+                        }
+                        else if (data.errorUsername) {
+                            $('#errorRegistro').html(data.errorMail);
+                            $('#signup-error').modal();
+                        }
+                        
+>>>>>>> 2fa8676faeb6f7bea03f22bb8f5a9ab3815e20ae
                     }
                 }
             });
@@ -69,8 +88,15 @@ $(document).ready(function() {
                         var host = window.location.host;
                         window.location.href = prot + '//' + host + '/index.php/poste/';
                     }
+<<<<<<< HEAD
                     $('#login-error').html(data.error);
                     $('#login-error').modal();
+=======
+                    else{
+                    	$('#errorIniciarSesion').html(data.error);
+                    	$('#login-error').modal();
+                    }
+>>>>>>> 2fa8676faeb6f7bea03f22bb8f5a9ab3815e20ae
                 }
             });
         }
@@ -94,7 +120,11 @@ $(document).ready(function() {
                     var data = JSON.parse(data);
 
                     if (data.errorUsername) {
+<<<<<<< HEAD
                         $('#edit-error').html(data.errorUsername);
+=======
+                        $('#errorEdit').html(data.errorUsername);
+>>>>>>> 2fa8676faeb6f7bea03f22bb8f5a9ab3815e20ae
                         $('#edit-error').modal();
                     }
                 }
