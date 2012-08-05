@@ -35,6 +35,14 @@ class API extends CI_Controller{
 		
 	}
 
+
+	function getXMLbyUser(){}
+
+	function getXMLallHoods(){}
+
+
+
+
 }
 
 ?>
