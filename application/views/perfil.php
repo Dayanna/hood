@@ -23,7 +23,7 @@
           </li>
           <li class="span4">
             <h1>adjuntos</h1>
-            <h2>10</h2>
+            <h2 class="attachmentsAmount"><?php echo $numberAttachments ?></h2>
           </li>
           <li class="span4 clearfix">
             <h1>suscripcion</h1>
@@ -49,7 +49,7 @@
                   <?php } ?>
                     <h1><?php echo $valor['name'] . " " . $valor['last_name']; ?></h1>
                     <h2><?php echo $valor['job_position'] ?></h2>
-                    <span>@<?php echo $valor['name'] ?></span>
+                    <span>@<?php echo $valor['username'] ?></span>
                   </a>
                 </li>
             <?php   
